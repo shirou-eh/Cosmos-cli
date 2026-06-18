@@ -106,7 +106,8 @@ def render_vab_ui(rocket, msg="", combo_count=0, current_side="center"):
     t.add_row("Тяга (Атм/Вак)", f"{act['thrust_atm']}/{act['thrust_vac']} кН")
     t.add_row("Isp (средний)", f"{act['isp']} с")
 
-    denom = total_mass * PLANETS[state.current_planet]["gravity"] * state.physics_multiplier
+    local_g = PLANETS[state.current_planet]["gravity"]
+    denom = total_mass * (local_g if local_g > 0 else 1.0) * state.physics_multiplier
     twr = act['thrust_atm'] / denom if denom != 0 else 0
     twr_color = "#FF4444" if twr < 1.0 else ("#FFD700" if twr < 1.5 else "#00FF00")
     t.add_row("[bold]TWR (Атм)[/bold]", f"[{twr_color} bold]{twr:.2f}[/{twr_color} bold]")

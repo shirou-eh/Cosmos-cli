@@ -267,8 +267,12 @@ def flight_loop():
                         station_loop()
                         break
                     elif act == "Орбитальный Скан (EVA)":
-                        flight.add_log(f"Собраны научные данные. Минералов: {flight.planet['minerals']} kt.", "SUCCESS")
-                        state.science += 25
+                        if flight.planet_id in state.scanned_planets:
+                            flight.add_log("Научных данных в этом секторе больше нет. Требуется планета с новой геологией.", "ALERT")
+                        else:
+                            state.scanned_planets.add(flight.planet_id)
+                            flight.add_log(f"Собраны научные данные. Минералов: {flight.planet['minerals']} kt.", "SUCCESS")
+                            state.science += 25
                     elif act.startswith("Маневр перехвата:"):
                         dest_name = act.split(": ")[-1]
                         dest_id = next((k for k, v in PLANETS.items() if v["name"] == dest_name), None)

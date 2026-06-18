@@ -17,6 +17,7 @@ class GameState:
         self.unlocked_techs = ["basic"]
         self.active_contract = None
         self.completed_contracts = []
+        self.scanned_planets = set()
         
         self.physics_multiplier = 1.0
         self.cost_multiplier = 1.0
@@ -49,7 +50,7 @@ class GameState:
             return []
 
     def save_game(self):
-        from .database import SessionLocal, ProfileModel, ColonyModel, UnlockedTechModel, CompletedContractModel, RocketModel, RocketStageModel, RocketPartModel, SettingModel
+        from .database import SessionLocal, ProfileModel, ColonyModel, UnlockedTechModel, CompletedContractModel, RocketModel, RocketStageModel, RocketPartModel, SettingModel, ScannedPlanetModel
         try:
             with SessionLocal() as db:
                 profile = db.query(ProfileModel).filter(ProfileModel.name == self.profile_name).first()
@@ -81,6 +82,10 @@ class GameState:
                 db.query(SettingModel).filter(SettingModel.profile_id == profile.id).delete()
                 for k, v in self.settings.items():
                     db.add(SettingModel(profile=profile, key=str(k), value=str(v)))
+
+                db.query(ScannedPlanetModel).filter(ScannedPlanetModel.profile_id == profile.id).delete()
+                for p_id in self.scanned_planets:
+                    db.add(ScannedPlanetModel(profile=profile, planet_id=p_id))
 
                 db.query(RocketModel).filter(RocketModel.profile_id == profile.id).delete()
                 for r in self.rockets:
@@ -132,6 +137,7 @@ class GameState:
                 self.settings = {s.key: s.value for s in profile.settings}
                 self.unlocked_techs = [t.tech_id for t in profile.unlocked_techs]
                 self.completed_contracts = [c.contract_id for c in profile.completed_contracts]
+                self.scanned_planets = {s.planet_id for s in profile.scanned_planets}
                 
                 self.rockets = []
                 for r_model in profile.rockets:

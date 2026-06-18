@@ -24,7 +24,7 @@ echo -e "${N}"
 PYTHON=""
 for cmd in python3 python; do
     if command -v $cmd &>/dev/null; then
-        VER=$($cmd --version 2>&1 | grep -oP '\d+\.\d+')
+        VER=$($cmd --version 2>&1 | grep -oE '[0-9]+\.[0-9]+' | head -1)
         MAJOR=${VER%%.*}
         MINOR=${VER#*.}
         if [ "$MAJOR" -ge 3 ] && [ "$MINOR" -ge 9 ]; then
@@ -52,17 +52,14 @@ echo ""
 if command -v cosmos &>/dev/null; then
     echo -e "${G}✓ Установка завершена!${N}"
     echo -e "${C}Запустите:${N} cosmos"
+elif $PYTHON -c "import cosmos" 2>/dev/null; then
+    echo -e "${G}✓ Установка завершена!${N}"
+    echo -e "${C}Запустите:${N} $PYTHON -m cosmos"
 else
-    VENV=$($PYTHON -c "import sys; print(hasattr(sys, 'real_prefix') or sys.base_prefix != sys.prefix)")
-    if $PYTHON -c "import cosmos" 2>/dev/null; then
-        echo -e "${G}✓ Установка завершена!${N}"
-        echo -e "${C}Запустите:${N} $PYTHON -m cosmos.main start"
-    else
-        echo -e "${R}Ошибка установки.${N}"
-        echo "Попробуйте вручную:"
-        echo "  git clone https://github.com/$REPO.git"
-        echo "  cd ${SUBDIR} && $PYTHON -m venv venv && source venv/bin/activate"
-        echo "  pip install -r requirements.txt && python -m cosmos.main start"
-        exit 1
-    fi
+    echo -e "${R}Ошибка установки.${N}"
+    echo "Попробуйте вручную:"
+    echo "  git clone https://github.com/$REPO.git"
+    echo "  cd Cosmos-cli && $PYTHON -m venv venv && source venv/bin/activate"
+    echo "  pip install -r requirements.txt && python -m cosmos"
+    exit 1
 fi

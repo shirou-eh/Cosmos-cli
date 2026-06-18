@@ -4,7 +4,8 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignK
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from sqlalchemy.pool import StaticPool
 
-DB_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_DIR = os.path.join(os.path.expanduser("~"), ".local", "share", "cosmos")
+os.makedirs(DB_DIR, exist_ok=True)
 DB_PATH = os.path.join(DB_DIR, "cosmos_data.db")
 
 Base = declarative_base()
@@ -26,6 +27,7 @@ class ProfileModel(Base):
     completed_contracts = relationship("CompletedContractModel", back_populates="profile", cascade="all, delete-orphan")
     rockets = relationship("RocketModel", back_populates="profile", cascade="all, delete-orphan")
     settings = relationship("SettingModel", back_populates="profile", cascade="all, delete-orphan")
+    scanned_planets = relationship("ScannedPlanetModel", back_populates="profile", cascade="all, delete-orphan")
 
 class ColonyModel(Base):
     __tablename__ = 'colony'
@@ -76,6 +78,13 @@ class RocketPartModel(Base):
 
     def to_dict(self):
         return {"category": self.category, "part_id": self.part_id, "side": self.side}
+
+class ScannedPlanetModel(Base):
+    __tablename__ = 'scanned_planet'
+    id = Column(Integer, primary_key=True)
+    profile_id = Column(Integer, ForeignKey('profile.id'))
+    planet_id = Column(String, nullable=False)
+    profile = relationship("ProfileModel", back_populates="scanned_planets")
 
 class SettingModel(Base):
     __tablename__ = 'setting'

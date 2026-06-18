@@ -42,7 +42,7 @@ def contract_loop():
             else:
                 break
         else:
-            avail = [c for c in CONTRACTS if c["id"] not in state.completed_contracts]
+            avail = [c for c in CONTRACTS if c["id"] not in state.completed_contracts and all(p in state.completed_contracts for p in c.get("prereq", []))]
             if not avail:
                 console.print("[#DA70D6]Нет доступных миссий. Ждите предложений спонсоров.[/#DA70D6]"); input(); break
                 
