@@ -10,26 +10,33 @@ CLI-игра в жанре space program simulator, вдохновлённая K
 
 ## Установка
 
-**Вариант 1: pip (рекомендуется)**
+**Вариант 1: curl (самый быстрый)**
 
 ```bash
-pip install cosmos-cli
+curl -fsSL https://cosmos-cli.xyz/install | bash
 cosmos
 ```
 
-**Вариант 2: из репозитория**
+**Вариант 2: pip из GitHub**
+
+```bash
+pip install "https://github.com/shirou-eh/Cosmos-cli.git#subdirectory=Cosmos-cli"
+cosmos
+```
+
+**Вариант 3: из репозитория**
 
 ```bash
 git clone https://github.com/shirou-eh/Cosmos-cli.git
-cd Cosmos-cli
+cd Cosmos-cli/Cosmos-cli
 python -m venv venv
 source venv/bin/activate   # Linux/macOS
 # venv\Scripts\activate    # Windows
 pip install -r requirements.txt
-python -m cosmos.main
+python -m cosmos.main start
 ```
 
-**Вариант 3: Docker**
+**Вариант 4: Docker**
 
 ```bash
 docker-compose up
