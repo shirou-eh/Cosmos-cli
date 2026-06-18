@@ -1,0 +1,421 @@
+<!DOCTYPE html><html class="dark" lang="ru"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>VoidCorp Terminal — Документация</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+  :root { --primary: #ffa9fb; --background: #0d0d0d; }
+  body { background-color: #0d0d0d; color: #ffa9fb; font-family: 'JetBrains Mono', monospace; overflow-x: hidden; }
+  .border-double-custom { border: 4px double #ffa9fb; }
+  .panel-header { position: relative; top: -14px; left: 12px; background: #0d0d0d; padding: 0 8px; display: inline-block; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .cursor-blink { display: inline-block; width: 10px; height: 1.2em; background-color: #ffa9fb; vertical-align: middle; animation: blink 1s step-end infinite; }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #210022; }
+  ::-webkit-scrollbar-thumb { background: #ffa9fb; }
+  .ascii-grid { background-image: radial-gradient(circle, #3e0040 1px, transparent 1px); background-size: 24px 24px; }
+</style>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-secondary-container": "#027100", "background": "#0d0d0d",
+          "tertiary-fixed": "#ffdad7", "primary-fixed-dim": "#ffa9fb",
+          "on-surface": "#ffd6f7", "surface-container-high": "#500052",
+          "inverse-primary": "#96339b", "primary-fixed": "#ffd6f9",
+          "on-tertiary": "#680009", "surface-container": "#3e0040",
+          "surface-container-low": "#37003a", "primary": "#ffa9fb",
+          "outline": "#9d8b99", "secondary-fixed-dim": "#02e600",
+          "on-secondary": "#013a00", "on-secondary-fixed": "#002200",
+          "on-secondary-fixed-variant": "#015300", "on-error-container": "#ffdad6",
+          "surface-variant": "#620065", "secondary-container": "#28ff1d",
+          "on-surface-variant": "#d5c1d0", "error-container": "#93000a",
+          "on-tertiary-fixed": "#410004", "tertiary": "#ffb3ad",
+          "surface-container-lowest": "#210022", "surface": "#2a002b",
+          "tertiary-container": "#ff8880", "on-tertiary-fixed-variant": "#930012",
+          "primary-container": "#ee82ee", "on-background": "#ffd6f7",
+          "surface-container-highest": "#620065", "surface-bright": "#69006d",
+          "on-primary": "#590060", "surface-dim": "#2a002b",
+          "on-error": "#690005", "error": "#ffb4ab",
+          "surface-tint": "#ffa9fb", "on-primary-fixed-variant": "#7a1481",
+          "secondary": "#edffe1", "outline-variant": "#51424e",
+          "on-tertiary-container": "#84000f", "inverse-surface": "#ffd6f7",
+          "tertiary-fixed-dim": "#ffb3ad", "secondary-fixed": "#77ff61",
+          "on-primary-fixed": "#37003b", "on-primary-container": "#700478",
+          "inverse-on-surface": "#5a005d"
+        },
+        borderRadius: { DEFAULT: "0px", lg: "0px", xl: "0px", full: "9999px" },
+        spacing: { "panel-padding": "1.5rem", "container-max": "1200px", "gutter": "24px", "cell": "8px" },
+        fontFamily: { "body-md": ["JetBrains Mono"], "label-caps": ["Space Mono"], "headline-md": ["JetBrains Mono"], "headline-lg": ["JetBrains Mono"], "code-inline": ["JetBrains Mono"], "body-lg": ["JetBrains Mono"] },
+        fontSize: {
+          "body-md": ["16px", {"lineHeight":"1.5","fontWeight":"400"}],
+          "label-caps": ["12px", {"lineHeight":"1","letterSpacing":"0.1em","fontWeight":"700"}],
+          "headline-md": ["24px", {"lineHeight":"1.2","fontWeight":"700"}],
+          "headline-lg": ["48px", {"lineHeight":"1.1","letterSpacing":"-0.02em","fontWeight":"800"}],
+          "code-inline": ["14px", {"lineHeight":"1.4","fontWeight":"500"}],
+          "body-lg": ["18px", {"lineHeight":"1.6","fontWeight":"400"}]
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="ascii-grid min-h-screen flex flex-col">
+
+<!-- TopNavBar -->
+<nav class="w-full top-0 z-50 bg-background border-b-2 border-primary flex justify-between items-center px-gutter py-cell fixed">
+<div class="flex items-center gap-4">
+<span class="font-headline-md text-headline-md text-primary tracking-tighter">VOIDCORP_DOCS</span>
+<div class="hidden md:flex gap-2 items-center text-primary font-label-caps border border-primary px-2">
+<span class="w-2 h-2 bg-secondary-container rounded-full animate-pulse"></span>
+      STATUS: OPERATIONAL
+  </div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-4">
+<a class="font-body-md text-body-md text-primary px-2 transition-colors duration-100 ease-in-out hover:bg-primary-container hover:text-on-primary-container" href="https://cosmos-cli.xyz">ГЛАВНАЯ</a>
+<a class="font-body-md text-body-md text-primary px-2 transition-colors duration-100 ease-in-out hover:bg-primary-container hover:text-on-primary-container" href="https://github.com/shirou-eh/Cosmos-cli">GITHUB</a>
+</div>
+</div>
+</nav>
+
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-background border-r-2 border-primary flex flex-col pt-20 hidden md:flex z-40">
+<div class="px-6 py-4">
+<div class="font-headline-md text-headline-md text-primary mb-1">ДОКУМЕНТАЦИЯ</div>
+<div class="font-label-caps text-label-caps text-on-surface-variant opacity-70">v0.1.0-beta</div>
+</div>
+<nav class="flex-1 space-y-1 mt-4">
+<a class="text-primary px-4 py-3 flex items-center gap-3 font-label-caps hover:bg-surface-container transition-all cursor-pointer" href="#start">
+<span class="material-symbols-outlined text-[18px]">rocket_launch</span> НАЧАЛО РАБОТЫ
+</a>
+<a class="text-primary px-4 py-3 flex items-center gap-3 font-label-caps hover:bg-surface-container transition-all cursor-pointer" href="#vab">
+<span class="material-symbols-outlined text-[18px]">build</span> СБОРКА РАКЕТ
+</a>
+<a class="bg-primary text-on-primary font-bold px-4 py-3 flex items-center gap-3 font-label-caps transition-all cursor-pointer" href="#controls">
+<span class="material-symbols-outlined text-[18px]">terminal</span> УПРАВЛЕНИЕ
+</a>
+<a class="text-primary px-4 py-3 flex items-center gap-3 font-label-caps hover:bg-surface-container transition-all cursor-pointer" href="#planets">
+<span class="material-symbols-outlined text-[18px]">language</span> ПЛАНЕТЫ
+</a>
+<a class="text-primary px-4 py-3 flex items-center gap-3 font-label-caps hover:bg-surface-container transition-all cursor-pointer" href="#contracts">
+<span class="material-symbols-outlined text-[18px]">assignment</span> КОНТРАКТЫ
+</a>
+<a class="text-primary px-4 py-3 flex items-center gap-3 font-label-caps hover:bg-surface-container transition-all cursor-pointer" href="#tech">
+<span class="material-symbols-outlined text-[18px]">settings</span> ТЕХНОЛОГИИ
+</a>
+<a class="text-primary px-4 py-3 flex items-center gap-3 font-label-caps hover:bg-surface-container transition-all cursor-pointer" href="#physics">
+<span class="material-symbols-outlined text-[18px]">science</span> ФИЗИКА
+</a>
+</nav>
+<div class="p-4 border-t border-primary/30 mt-auto">
+<button class="w-full mt-6 py-2 border border-primary text-primary font-label-caps hover:bg-primary hover:text-background transition-all" onclick="window.location='https://cosmos-cli.xyz/install'">
+  УСТАНОВИТЬ
+</button>
+</div>
+</aside>
+
+<main class="md:ml-64 pt-24 pb-12 px-gutter flex-1 max-w-container-max mx-auto w-full">
+
+<!-- Header -->
+<div class="relative h-48 w-full mb-12 border-double-custom overflow-hidden">
+<div class="absolute inset-0 flex flex-col items-center justify-center bg-background/60 p-8 text-center">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tighter mb-4 drop-shadow-[0_0_10px_#ee82ee]">
+      ДОКУМЕНТАЦИЯ<span class="cursor-blink"></span>
+  </h1>
+<p class="font-body-lg text-body-lg text-primary max-w-2xl">
+      Полное руководство по космической программе VoidCorp Terminal.
+  </p>
+</div>
+<div class="absolute top-2 left-2 text-primary font-code-inline text-[10px]">[v0.1.0]</div>
+<div class="absolute bottom-2 right-2 text-primary font-code-inline text-[10px]">BETA</div>
+</div>
+
+<div class="space-y-16">
+
+<!-- START -->
+<section id="start">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ НАЧАЛО РАБОТЫ ├──</span>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      VoidCorp Terminal — симулятор космической программы прямо в терминале.
+      Собирай ракеты из деталей, запускай их, выполняй контракты спонсоров,
+      исследуй планеты и открывай новые технологии.
+  </p>
+<div class="bg-surface-container-lowest border-double-custom p-6 mb-4">
+<div class="flex justify-between items-center mb-4">
+<span class="font-label-caps text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">terminal</span> УСТАНОВКА
+</span>
+<button class="font-label-caps text-primary border border-primary px-3 py-1 hover:bg-primary hover:text-background transition-all" onclick="copyText(this,'curl -fsSL https://cosmos-cli.xyz/install | bash')">КОПИРОВАТЬ</button>
+</div>
+<pre class="font-code-inline text-code-inline text-primary-fixed-dim whitespace-pre-wrap overflow-x-auto"><span class="text-primary">$</span> curl -fsSL https://cosmos-cli.xyz/install | bash
+<span class="text-on-secondary-container">[ OK ]</span> Python 3.9+
+<span class="text-on-secondary-container">[ OK ]</span> Установка завершена
+<span class="text-primary">$</span> cosmos</pre>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant">
+      <span class="text-secondary-fixed">Требования:</span> Python 3.9+, терминал с True Color (Windows Terminal / iTerm2 / GNOME Terminal)
+  </div>
+</div>
+</section>
+
+<!-- VAB -->
+<section id="vab">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ СБОРКА РАКЕТ (VAB) ├──</span>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      В Сборочном Цехе (VAB) ты собираешь ракету из деталей. Нажми <span class="text-primary">[V]</span> в главном меню.
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3 mt-6">Детали</h3>
+<div class="overflow-x-auto border border-primary/30 mb-4">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container text-primary border-b border-primary">
+<tr><th class="p-3 font-label-caps border-r border-primary/30">Категория</th><th class="p-3 font-label-caps border-r border-primary/30">Клавиша</th><th class="p-3 font-label-caps">Описание</th></tr>
+</thead>
+<tbody class="divide-y divide-primary/20">
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Командный модуль</td><td class="p-3 font-label-caps border-r border-primary/30">[1]</td><td class="p-3 text-on-surface-variant">Капсула экипажа. Без неё ракета не взлетит.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Топливные баки</td><td class="p-3 font-label-caps border-r border-primary/30">[2]</td><td class="p-3 text-on-surface-variant">Хранят топливо. Разной ёмкости.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Двигатели</td><td class="p-3 font-label-caps border-r border-primary/30">[3]</td><td class="p-3 text-on-surface-variant">Создают тягу. Есть атмосферные и вакуумные.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Утилиты</td><td class="p-3 font-label-caps border-r border-primary/30">[4]</td><td class="p-3 text-on-surface-variant">Парашюты, бур, солнечные панели, и многое другое.</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3 mt-6">Боковые ускорители</h3>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      Используй клавишу <span class="text-primary">[A]</span> для переключения стороны установки: ЦЕНТР → ЛЕВЫЙ БОК → ПРАВЫЙ БОК.
+      Так можно строить ракеты с боковыми ускорителями (например, как Союз).
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3 mt-6">Ступени</h3>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      Разделитель (<span class="text-primary">[5]</span>) создаёт новую ступень. Детали до разделителя — верхняя ступень,
+      после разделителя — нижняя (она запускается первой и отбрасывается).
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3 mt-6">Система COMBO</h3>
+<p class="font-body-md text-body-md leading-relaxed text-on-surface-variant">
+      Устанавливай детали быстро (в течение 2 секунд) — получишь скидку до 50% на всю ракету.
+  </p>
+</div>
+</section>
+
+<!-- CONTROLS -->
+<section id="controls">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ УПРАВЛЕНИЕ ├──</span>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Главное меню</h3>
+<div class="overflow-x-auto border border-primary/30 mb-6">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container text-primary border-b border-primary">
+<tr><th class="p-3 font-label-caps border-r border-primary/30">Клавиша</th><th class="p-3 font-label-caps">Действие</th></tr>
+</thead>
+<tbody class="divide-y divide-primary/20">
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">V</td><td class="p-3 text-on-surface-variant">Сборочный Цех (VAB)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">L</td><td class="p-3 text-on-surface-variant">Стартовая площадка</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">M</td><td class="p-3 text-on-surface-variant">Mission Control (контракты)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">R</td><td class="p-3 text-on-surface-variant">Центр Исследований (технологии)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">S</td><td class="p-3 text-on-surface-variant">Сохранить игру</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Q</td><td class="p-3 text-on-surface-variant">Выход</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">В полёте</h3>
+<div class="overflow-x-auto border border-primary/30 mb-6">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container text-primary border-b border-primary">
+<tr><th class="p-3 font-label-caps border-r border-primary/30">Клавиша</th><th class="p-3 font-label-caps">Действие</th></tr>
+</thead>
+<tbody class="divide-y divide-primary/20">
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Z</td><td class="p-3 text-on-surface-variant">Максимальная тяга + старт</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">X</td><td class="p-3 text-on-surface-variant">Выключить двигатели</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">R / F</td><td class="p-3 text-on-surface-variant">Увеличить / уменьшить тягу</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">W / S</td><td class="p-3 text-on-surface-variant">Тангаж (наклон ракеты: 0° = горизонт, 90° = вверх)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Пробел</td><td class="p-3 text-on-surface-variant">Отстрел ступени (Staging)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">P</td><td class="p-3 text-on-surface-variant">Раскрыть парашюты</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">O</td><td class="p-3 text-on-surface-variant">Overdrive — 150% тяги (риск взрыва)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">&gt; / &lt;</td><td class="p-3 text-on-surface-variant">Ускорение / замедление времени (x1–x1000)</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">M</td><td class="p-3 text-on-surface-variant">Бортовой компьютер (орбитальная информация, манёвры)</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Советы по полёту</h3>
+<div class="space-y-3 font-body-md text-body-md text-on-surface-variant">
+<div class="border border-outline-variant p-4">
+<span class="text-secondary-fixed">Gravity Turn:</span> Начни наклон на 10 км. Плавно уменьшай тангаж по мере подъёма.
+  На высоте 30–40 км угол должен быть ~30°. На 70–100 км — почти горизонтально.
+</div>
+<div class="border border-outline-variant p-4">
+<span class="text-secondary-fixed">Орбита:</span> Целевая скорость для орбиты Терры — ~2800 м/с на высоте 100 км.
+  Следи за апогеем и перигеем в бортовом компьютере.
+</div>
+<div class="border border-outline-variant p-4">
+<span class="text-secondary-fixed">Посадка:</span> Включи парашюты при скорости снижения и высоте &lt; 5000 м.
+  Используй двигатели для мягкого касания на безатмосферных телах.
+</div>
+<div class="border border-outline-variant p-4">
+<span class="text-secondary-fixed">Perfect Staging:</span> Отстреливай ступень при &lt; 5% топлива —
+  получишь бонус +50% к тяге следующей ступени.
+</div>
+</div>
+</div>
+</section>
+
+<!-- PLANETS -->
+<section id="planets">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ ПЛАНЕТЫ ├──</span>
+<div class="overflow-x-auto border border-primary/30">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container text-primary border-b border-primary">
+<tr><th class="p-3 font-label-caps border-r border-primary/30">ID</th><th class="p-3 font-label-caps border-r border-primary/30">Планета</th><th class="p-3 font-label-caps border-r border-primary/30">g (м/с²)</th><th class="p-3 font-label-caps border-r border-primary/30">Атмосфера</th><th class="p-3 font-label-caps">Описание</th></tr>
+</thead>
+<tbody class="divide-y divide-primary/20">
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">TER</td><td class="p-3 text-primary border-r border-primary/30">Терра</td><td class="p-3 text-secondary-fixed border-r border-primary/30">4.0</td><td class="p-3 text-on-surface-variant border-r border-primary/30">70 км</td><td class="p-3 text-on-surface-variant">Родная планета. Стартовая площадка.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">LUN</td><td class="p-3 text-primary border-r border-primary/30">Луна</td><td class="p-3 text-secondary-fixed border-r border-primary/30">1.6</td><td class="p-3 text-on-surface-variant border-r border-primary/30">—</td><td class="p-3 text-on-surface-variant">Ближайшая цель. Первая высадка.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">ARS</td><td class="p-3 text-primary border-r border-primary/30">Арес (Марс)</td><td class="p-3 text-secondary-fixed border-r border-primary/30">3.7</td><td class="p-3 text-on-surface-variant border-r border-primary/30">50 км</td><td class="p-3 text-on-surface-variant">Красная планета. Колонизация.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">ISH</td><td class="p-3 text-primary border-r border-primary/30">Иштар (Венера)</td><td class="p-3 text-secondary-fixed border-r border-primary/30">8.9</td><td class="p-3 text-on-surface-variant border-r border-primary/30">150 км</td><td class="p-3 text-on-surface-variant">Адский жар. Плотная атмосфера.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">ZEU</td><td class="p-3 text-primary border-r border-primary/30">Зевс (Юпитер)</td><td class="p-3 text-secondary-fixed border-r border-primary/30">24.8</td><td class="p-3 text-on-surface-variant border-r border-primary/30">200 км</td><td class="p-3 text-on-surface-variant">Газовый гигант. Мощнейшая гравитация.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">KRN</td><td class="p-3 text-primary border-r border-primary/30">Кронос (Сатурн)</td><td class="p-3 text-secondary-fixed border-r border-primary/30">10.4</td><td class="p-3 text-on-surface-variant border-r border-primary/30">120 км</td><td class="p-3 text-on-surface-variant">Кольца во тьме. Финал системы.</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">STA</td><td class="p-3 text-primary border-r border-primary/30">МКС «Void-Альфа»</td><td class="p-3 text-secondary-fixed border-r border-primary/30">0.0</td><td class="p-3 text-on-surface-variant border-r border-primary/30">—</td><td class="p-3 text-on-surface-variant">Орбитальная станция. Стыковка.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- CONTRACTS -->
+<section id="contracts">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ КОНТРАКТЫ ├──</span>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      В Mission Control (<span class="text-primary">[M]</span>) ты берёшь контракты спонсоров.
+      За выполнение дают кредиты (¤) и научные очки (⚛). 
+      Рекомендуемый порядок — сверху вниз.
+  </p>
+<div class="overflow-x-auto border border-primary/30">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container text-primary border-b border-primary">
+<tr><th class="p-3 font-label-caps border-r border-primary/30">Контракт</th><th class="p-3 font-label-caps border-r border-primary/30">Награда</th><th class="p-3 font-label-caps border-r border-primary/30">Наука</th><th class="p-3 font-label-caps">Цель</th></tr>
+</thead>
+<tbody class="divide-y divide-primary/20">
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Отрыв от земли</td><td class="p-3 text-secondary-fixed border-r border-primary/30">10 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">5⚛</td><td class="p-3 text-on-surface-variant">1 км</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Выше облаков</td><td class="p-3 text-secondary-fixed border-r border-primary/30">20 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">10⚛</td><td class="p-3 text-on-surface-variant">5 км</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Первый прыжок</td><td class="p-3 text-secondary-fixed border-r border-primary/30">30 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">15⚛</td><td class="p-3 text-on-surface-variant">10 км</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Стратосфера</td><td class="p-3 text-secondary-fixed border-r border-primary/30">40 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">20⚛</td><td class="p-3 text-on-surface-variant">20 км</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Граница космоса</td><td class="p-3 text-secondary-fixed border-r border-primary/30">50 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">25⚛</td><td class="p-3 text-on-surface-variant">50 км</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Выход в Космос</td><td class="p-3 text-secondary-fixed border-r border-primary/30">100 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">50⚛</td><td class="p-3 text-on-surface-variant">100 км</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Орбитальная Механика</td><td class="p-3 text-secondary-fixed border-r border-primary/30">250 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">150⚛</td><td class="p-3 text-on-surface-variant">Орбита</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Полет к Луне</td><td class="p-3 text-secondary-fixed border-r border-primary/30">400 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">200⚛</td><td class="p-3 text-on-surface-variant">Орбита Луны</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Лунный Первопроходец</td><td class="p-3 text-secondary-fixed border-r border-primary/30">1 000 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">400⚛</td><td class="p-3 text-on-surface-variant">Посадка на Луну</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Покорение Ареса</td><td class="p-3 text-secondary-fixed border-r border-primary/30">3 000 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">600⚛</td><td class="p-3 text-on-surface-variant">Посадка на Арес</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Взгляд в Пустоту</td><td class="p-3 text-secondary-fixed border-r border-primary/30">50 000 000 ¤</td><td class="p-3 text-primary border-r border-primary/30">1000⚛</td><td class="p-3 text-on-surface-variant">Предел системы</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- TECH -->
+<section id="tech">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ ТЕХНОЛОГИИ ├──</span>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      В Центре Исследований (<span class="text-primary">[R]</span>) открывай новые детали.
+      Очки науки (⚛) зарабатываются выполнением контрактов и орбитальным сканированием.
+  </p>
+<div class="overflow-x-auto border border-primary/30">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface-container text-primary border-b border-primary">
+<tr><th class="p-3 font-label-caps border-r border-primary/30">Уровень</th><th class="p-3 font-label-caps border-r border-primary/30">Стоимость</th><th class="p-3 font-label-caps border-r border-primary/30">Деталей</th><th class="p-3 font-label-caps">Что открывает</th></tr>
+</thead>
+<tbody class="divide-y divide-primary/20">
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Tier 1</td><td class="p-3 text-[#00FF00] border-r border-primary/30">10⚛</td><td class="p-3 text-on-surface-variant border-r border-primary/30">7</td><td class="p-3 text-on-surface-variant">Тяжёлый двигатель, крио-бак, командный модуль, солнечные панели, батарея</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Tier 2</td><td class="p-3 text-[#FFD700] border-r border-primary/30">30⚛</td><td class="p-3 text-on-surface-variant border-r border-primary/30">7</td><td class="p-3 text-on-surface-variant">Ионный двигатель, ядерный RTG, ровер, орбитальный сканер, связь</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Tier 3</td><td class="p-3 text-[#FFA500] border-r border-primary/30">100⚛</td><td class="p-3 text-on-surface-variant border-r border-primary/30">9</td><td class="p-3 text-on-surface-variant">Плазменный двигатель, орбитальная лаборатория, ремонтный модуль, грузовой отсек</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Tier 4</td><td class="p-3 text-[#FF4444] border-r border-primary/30">300⚛</td><td class="p-3 text-on-surface-variant border-r border-primary/30">8</td><td class="p-3 text-on-surface-variant">Фотонный двигатель, гравитационный зонд, продвинутые капсулы</td></tr>
+<tr class="hover:bg-primary/5"><td class="p-3 font-code-inline text-primary-fixed border-r border-primary/30">Tier 5</td><td class="p-3 text-[#FF00FF] border-r border-primary/30">1000⚛</td><td class="p-3 text-on-surface-variant border-r border-primary/30">4</td><td class="p-3 text-on-surface-variant">Варп-двигатель, выход за пределы Солнечной системы</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<!-- PHYSICS -->
+<section id="physics">
+<div class="border-t-2 border-primary pt-8 relative">
+<span class="panel-header font-headline-md text-primary">──┤ ФИЗИКА ├──</span>
+<p class="font-body-md text-body-md mb-4 leading-relaxed text-on-surface-variant">
+      В игре используется симуляция орбитальной механики с RK4-интегратором.
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Дельта-V</h3>
+<p class="font-body-md text-body-md mb-4 text-on-surface-variant">
+      В VAB показывается расчётная Δv ракеты с учётом ступеней.
+      Формула: <span class="text-primary">Δv = Isp × g₀ × ln(m₀/m₁)</span>
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">TWR</h3>
+<p class="font-body-md text-body-md mb-4 text-on-surface-variant">
+      Отношение тяги к весу. <span class="text-[#FF4444]">TWR &lt; 1.0</span> — ракета не взлетит.
+      <span class="text-[#FFD700]">TWR 1.0–1.5</span> — взлетит, но медленно.
+      <span class="text-[#00FF00]">TWR &gt; 1.5</span> — оптимально.
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Расход топлива</h3>
+<p class="font-body-md text-body-md mb-4 text-on-surface-variant">
+      Учитывает Isp двигателя и атмосферное давление.
+      В атмосфере двигатели работают менее эффективно.
+  </p>
+
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Атмосфера</h3>
+<p class="font-body-md text-body-md mb-4 text-on-surface-variant">
+      Плотность падает с высотой. На границе атмосферы сопротивление минимально.
+      Парашюты работают только в атмосфере.
+  </p>
+</div>
+</section>
+
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="w-full bottom-0 bg-surface-container-lowest border-t-2 border-primary flex justify-between items-center px-gutter py-cell mt-auto md:ml-64 w-auto">
+<div class="flex flex-col md:flex-row md:items-center gap-4">
+<span class="font-label-caps text-label-caps text-on-surface">(C) 2026 VoidCorp Industries · v0.1.0-beta</span>
+<span class="hidden md:block text-primary/30 font-code-inline">|</span>
+<div class="flex gap-4 font-code-inline text-code-inline">
+<a class="text-on-surface-variant hover:underline hover:text-secondary transition-all" href="https://cosmos-cli.xyz">Главная</a>
+<a class="text-on-surface-variant hover:underline hover:text-secondary transition-all" href="https://github.com/shirou-eh/Cosmos-cli">GitHub</a>
+<a class="text-on-surface-variant hover:underline hover:text-secondary transition-all" href="https://github.com/shirou-eh/Cosmos-cli/issues">Сообщить о баге</a>
+</div>
+</div>
+<div class="hidden sm:flex items-center gap-2 text-primary/50 font-code-inline text-[10px]">
+<span class="material-symbols-outlined text-xs">database</span>
+  DB_REPLICA: ORBIT-1
+</div>
+</footer>
+
+<script>
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = 'ГОТОВО';
+    btn.classList.add('bg-primary', 'text-background');
+    setTimeout(() => {
+      btn.innerHTML = 'КОПИРОВАТЬ';
+      btn.classList.remove('bg-primary', 'text-background');
+    }, 2000);
+  });
+}
+</script>
+
+</body></html>

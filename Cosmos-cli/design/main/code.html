@@ -1,0 +1,390 @@
+<!DOCTYPE html><html class="dark" lang="ru"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>VoidCorp Terminal — Космическая программа в терминале</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&amp;family=Space+Mono:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#9d8b99",
+                        "surface-container-highest": "#620065",
+                        "surface-container-low": "#37003a",
+                        "secondary-fixed": "#77ff61",
+                        "inverse-primary": "#96339b",
+                        "on-tertiary-fixed-variant": "#930012",
+                        "on-tertiary-fixed": "#410004",
+                        "primary-fixed-dim": "#ffa9fb",
+                        "on-primary-container": "#700478",
+                        "on-primary": "#590060",
+                        "on-primary-fixed": "#37003b",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#002200",
+                        "inverse-surface": "#ffd6f7",
+                        "on-surface-variant": "#d5c1d0",
+                        "surface": "#2a002b",
+                        "surface-container": "#3e0040",
+                        "background": "#0D0D0D",
+                        "on-secondary-container": "#027100",
+                        "surface-variant": "#620065",
+                        "on-secondary-fixed-variant": "#015300",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed-variant": "#7a1481",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "primary": "#ffa9fb",
+                        "surface-container-lowest": "#210022",
+                        "tertiary-container": "#ff8880",
+                        "on-tertiary-container": "#84000f",
+                        "secondary": "#edffe1",
+                        "surface-tint": "#ffa9fb",
+                        "primary-fixed": "#ffd6f9",
+                        "tertiary-fixed": "#ffdad7",
+                        "on-tertiary": "#680009",
+                        "tertiary": "#ffb3ad",
+                        "surface-container-high": "#500052",
+                        "secondary-fixed-dim": "#02e600",
+                        "inverse-on-surface": "#5a005d",
+                        "secondary-container": "#28ff1d",
+                        "outline-variant": "#51424e",
+                        "on-surface": "#ffd6f7",
+                        "on-secondary": "#013a00",
+                        "error-container": "#93000a",
+                        "surface-bright": "#69006d",
+                        "primary-container": "#ee82ee",
+                        "surface-dim": "#2a002b",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#ffd6f7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "gutter": "24px",
+                        "container-max": "1200px",
+                        "cell": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["JetBrains Mono"],
+                        "headline-lg": ["JetBrains Mono"],
+                        "body-lg": ["JetBrains Mono"],
+                        "code-inline": ["JetBrains Mono"],
+                        "label-caps": ["Space Mono"],
+                        "headline-lg-mobile": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "code-inline": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0D0D0D;
+            color: #ffd6f7;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+        }
+        .terminal-border-double {
+            border: 4px double #ffa9fb;
+            position: relative;
+        }
+        .rich-panel-header {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0D0D0D;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #ffa9fb;
+            font-weight: bold;
+            z-index: 10;
+        }
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #ffa9fb;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #ffa9fb; }
+        }
+        .cursor-blink {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: #ffa9fb;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .ascii-art {
+            line-height: 1;
+            white-space: pre;
+            color: #ee82ee;
+            font-weight: 800;
+        }
+        .glitch-hover:hover {
+            text-shadow: 2px 0 #77ff61, -2px 0 #ffa9fb;
+        }
+        .custom-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .custom-table td, .custom-table th {
+            border: 2px double #51424e;
+            padding: 12px;
+            text-align: left;
+        }
+        .btn-magenta-invert:hover {
+            background-color: #ee82ee;
+            color: #0D0D0D;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<nav class="bg-background w-full top-0 border-b-2 border-primary z-50">
+<div class="flex justify-between items-center w-full px-gutter py-cell max-w-container-max mx-auto">
+<div class="font-headline-lg text-headline-lg text-primary uppercase tracking-tighter cursor-pointer">VOIDCORP TERMINAL</div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-secondary border-b-2 border-secondary font-label-caps text-label-caps transition-colors duration-75 ease-in-out" href="https://cosmos-cli.xyz">ГЛАВНАЯ</a>
+<a class="text-outline hover:text-primary font-label-caps text-label-caps transition-colors duration-75 ease-in-out" href="https://docs.cosmos-cli.xyz">ДОКУМЕНТАЦИЯ</a>
+<a class="text-outline hover:text-primary font-label-caps text-label-caps transition-colors duration-75 ease-in-out" href="https://github.com/shirou-eh/Cosmos-cli">GITHUB</a>
+<button class="ml-4 border-2 border-primary px-4 py-1 text-primary hover:bg-primary hover:text-background transition-all font-label-caps text-label-caps" onclick="document.getElementById('install-section').scrollIntoView({behavior:'smooth'})">УСТАНОВИТЬ</button>
+</div>
+</div>
+</nav>
+
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-12 space-y-16">
+
+<header class="w-full flex flex-col items-center justify-center pt-8">
+<div class="terminal-border-double p-8 md:p-12 w-full max-w-4xl text-center relative">
+<div class="rich-panel-header">╭── STATUS: OPERATIONAL ──╮</div>
+<div class="ascii-art text-[10px] md:text-[14px] overflow-x-auto">
+░█░█░█▀█░█▀▄░█▀▀░█▀█░█░█░███░░░█▀▀░█▀█░█░█░░░█▀▄░█▀█░█▀█░█▀█░█▀▄
+░█▄█░█▀█░█▀▄░█░░░█▀▀░█▄█░░░█░░░░▀▀█░█▀█░█░█░░░█▀▄░█░█░█▀▀░█▀▀░█▀▄
+░▀░▀░▀░▀░▀░▀░▀▀▀░▀░░░▀░▀░░░▀░░░░▀▀▀░▀░▀░▀▀▀░░░▀▀░░▀▀▀░▀░░░▀▀▀░▀░▀
+</div>
+<div class="mt-4 font-label-caps text-outline">v0.1.0-beta [КОСМИЧЕСКАЯ ПРОГРАММА В ТЕРМИНАЛЕ]</div>
+</div>
+</header>
+
+<section id="install-section" class="flex flex-col items-center">
+<div class="w-full max-w-3xl bg-surface-container-lowest border-2 border-outline-variant p-6 rounded-none">
+<div class="flex items-center justify-between mb-4 border-b border-outline-variant pb-2">
+<div class="flex gap-2">
+<div class="w-3 h-3 bg-error rounded-full"></div>
+<div class="w-3 h-3 bg-secondary-container rounded-full"></div>
+<div class="w-3 h-3 bg-primary-container rounded-full"></div>
+</div>
+<div class="text-outline font-label-caps text-[10px]">TERMINAL — bash</div>
+</div>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<code class="font-code-inline text-body-md flex items-center gap-2 overflow-x-auto whitespace-nowrap">
+<span class="text-secondary-fixed">$</span>
+<span class="text-on-background">curl -fsSL https://cosmos-cli.xyz/install | bash</span>
+</code>
+<button class="bg-transparent border-2 border-primary-container text-primary-container px-6 py-2 font-label-caps hover:bg-primary-container hover:text-on-primary-container transition-all active:scale-95 flex items-center gap-2 group" id="copy-btn">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+                    УСТАНОВИТЬ
+                </button>
+</div>
+<div class="mt-3 text-[12px] text-outline">
+Требуется: Python 3.9+ · Linux / macOS / Windows 10+
+</div>
+<div class="mt-2 text-[11px] text-outline-variant">
+<span class="text-secondary-fixed">$</span> pip install "https://github.com/shirou-eh/Cosmos-cli.git#subdirectory=Cosmos-cli"
+</div>
+</div>
+</section>
+
+<section class="flex flex-col items-center text-center px-4 max-w-2xl mx-auto">
+<div class="relative inline-block">
+<h2 class="font-headline-md text-headline-md text-secondary leading-relaxed inline">
+                Построй ракету. Выйди на орбиту. Исследуй Солнечную систему.
+            </h2>
+<span class="cursor-blink"></span>
+</div>
+<p class="mt-8 font-body-lg text-body-lg text-outline leading-relaxed">
+            Симулятор космической программы в терминале. Текстовый интерфейс, физика орбитальной механики, 43 детали, 7 планет, 20 контрактов. Вдохновлён Kerbal Space Program.
+        </p>
+</section>
+
+<!-- Features Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="terminal-border-double p-6 text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-2">rocket_launch</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">СБОРКА</h3>
+<p class="font-body-md text-body-md text-outline">Собирай ракеты в VAB: командный модуль, баки, двигатели, ускорители, утилиты. Боковые колонны для реалистичных конфигураций.</p>
+</div>
+<div class="terminal-border-double p-6 text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-2">orbit</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">ФИЗИКА</h3>
+<p class="font-body-md text-body-md text-outline">Орбитальная механика с RK4-интеграцией, реалистичный расход топлива через Isp, атмосферное торможение.</p>
+</div>
+<div class="terminal-border-double p-6 text-center">
+<span class="material-symbols-outlined text-4xl text-primary mb-2">language</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">ИССЛЕДОВАНИЯ</h3>
+<p class="font-body-md text-body-md text-outline">7 планет и спутников: от Луны до Кроноса. Контракты, технологии, колонии и научные открытия.</p>
+</div>
+</section>
+
+<!-- Controls Table -->
+<section class="flex flex-col items-center">
+<div class="w-full max-w-3xl">
+<div class="mb-4 font-label-caps text-primary border-l-4 border-primary pl-4">
+                ──┤ ПАНЕЛЬ УПРАВЛЕНИЯ ├──
+            </div>
+<table class="custom-table font-body-md">
+<thead class="bg-surface-container">
+<tr>
+<th class="text-primary-fixed uppercase tracking-wider">Клавиша</th>
+<th class="text-primary-fixed uppercase tracking-wider">Действие</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ V ]</td><td class="text-on-background">Сборочный Цех (VAB)</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ L ]</td><td class="text-on-background">Стартовая площадка</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ M ]</td><td class="text-on-background">Mission Control (контракты)</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ R ]</td><td class="text-on-background">Центр Исследований (технологии)</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ Space ]</td><td class="text-on-background">Отстрел ступени (Staging)</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ Z ]</td><td class="text-on-background">Максимальная тяга / Старт</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ X ]</td><td class="text-on-background">Выключить двигатели</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ R ] / [ F ]</td><td class="text-on-background">Увеличить / уменьшить тягу</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ W ] / [ S ]</td><td class="text-on-background">Тангаж (наклон ракеты)</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ P ]</td><td class="text-on-background">Парашюты</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ O ]</td><td class="text-on-background">Overdrive (150% тяги)</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ &gt; ] / [ &lt; ]</td><td class="text-on-background">Ускорение / замедление времени</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ S ]</td><td class="text-on-background">Сохранить игру</td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="text-secondary-fixed font-bold">[ Q ]</td><td class="text-on-background">Выход</td></tr>
+</tbody>
+</table>
+<div class="mt-4 text-[10px] text-outline italic text-right">
+                * Полный гайд — на docs.cosmos-cli.xyz
+            </div>
+</div>
+</section>
+
+<!-- Planets -->
+<section class="w-full max-w-3xl mx-auto">
+<div class="mb-4 font-label-caps text-primary border-l-4 border-primary pl-4">
+            ──┤ СОЛНЕЧНАЯ СИСТЕМА ├──
+        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="border border-outline-variant p-4"><span class="text-secondary-fixed">[TER]</span> <span class="text-primary">Терра</span> <span class="text-outline text-[12px]">g=4.0 · атм=70км</span><br><span class="text-outline-variant text-[12px]">Стартовая площадка. Синий мрамор.</span></div>
+<div class="border border-outline-variant p-4"><span class="text-secondary-fixed">[LUN]</span> <span class="text-primary">Луна</span> <span class="text-outline text-[12px]">g=1.6 · без атм.</span><br><span class="text-outline-variant text-[12px]">Ближайшая цель. Первая высадка.</span></div>
+<div class="border border-outline-variant p-4"><span class="text-secondary-fixed">[ARS]</span> <span class="text-primary">Арес (Марс)</span> <span class="text-outline text-[12px]">g=3.7 · атм=50км</span><br><span class="text-outline-variant text-[12px]">Красная планета. Колония ждёт.</span></div>
+<div class="border border-outline-variant p-4"><span class="text-secondary-fixed">[ISH]</span> <span class="text-primary">Иштар (Венера)</span> <span class="text-outline text-[12px]">g=8.9 · атм=150км</span><br><span class="text-outline-variant text-[12px]">Адский жар. Испытание для инженеров.</span></div>
+<div class="border border-outline-variant p-4"><span class="text-secondary-fixed">[ZEU]</span> <span class="text-primary">Зевс (Юпитер)</span> <span class="text-outline text-[12px]">g=24.8 · атм=200км</span><br><span class="text-outline-variant text-[12px]">Газовый гигант. Мощное притяжение.</span></div>
+<div class="border border-outline-variant p-4"><span class="text-secondary-fixed">[KRN]</span> <span class="text-primary">Кронос (Сатурн)</span> <span class="text-outline text-[12px]">g=10.4 · атм=120км</span><br><span class="text-outline-variant text-[12px]">Кольца во тьме. Далёкая цель.</span></div>
+</div>
+</section>
+
+<!-- Contracts Progress -->
+<section class="w-full max-w-3xl mx-auto">
+<div class="mb-4 font-label-caps text-primary border-l-4 border-primary pl-4">
+            ──┤ КОНТРАКТЫ (20 МИССИЙ) ├──
+        </div>
+<div class="space-y-2">
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">10 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-secondary-fixed h-full w-[5%]"></div></div><span class="text-outline text-[12px]">1 км</span></div>
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">30 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-primary h-full w-[12%]"></div></div><span class="text-outline text-[12px]">10 км</span></div>
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">100 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-primary h-full w-[25%]"></div></div><span class="text-outline text-[12px]">100 км</span></div>
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">250 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-primary h-full w-[40%]"></div></div><span class="text-outline text-[12px]">Орбита</span></div>
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">1 000 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-primary h-full w-[55%]"></div></div><span class="text-outline text-[12px]">Луна</span></div>
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">3 000 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-primary h-full w-[70%]"></div></div><span class="text-outline text-[12px]">Арес</span></div>
+<div class="flex items-center gap-2"><span class="text-secondary-fixed text-[12px] w-20">50 000 000 ¤</span><div class="flex-1 h-5 border border-outline-variant"><div class="bg-primary-container h-full w-[100%]"></div></div><span class="text-outline text-[12px]">Предел системы</span></div>
+</div>
+</section>
+
+<!-- Tech Tree -->
+<section class="w-full max-w-3xl mx-auto">
+<div class="mb-4 font-label-caps text-primary border-l-4 border-primary pl-4">
+            ──┤ ТЕХНОЛОГИИ (5 УРОВНЕЙ) ├──
+        </div>
+<div class="grid grid-cols-5 gap-2 text-center font-label-caps text-[11px]">
+<div class="border border-[#00FF00] p-3"><div class="text-[#00FF00]">10⚛</div><div class="text-outline">Tier 1</div><div class="text-outline-variant text-[10px]">Тяжёлые двигатели, крио-баки</div></div>
+<div class="border border-[#FFD700] p-3"><div class="text-[#FFD700]">30⚛</div><div class="text-outline">Tier 2</div><div class="text-outline-variant text-[10px]">Ионные двигатели, ядерные RTG</div></div>
+<div class="border border-[#FFA500] p-3"><div class="text-[#FFA500]">100⚛</div><div class="text-outline">Tier 3</div><div class="text-outline-variant text-[10px]">Плазменные двигатели, орбит. лаборатории</div></div>
+<div class="border border-[#FF4444] p-3"><div class="text-[#FF4444]">300⚛</div><div class="text-outline">Tier 4</div><div class="text-outline-variant text-[10px]">Фотонные двигатели, гравитационные зонды</div></div>
+<div class="border border-[#FF00FF] p-3"><div class="text-[#FF00FF]">1000⚛</div><div class="text-outline">Tier 5</div><div class="text-outline-variant text-[10px]">Варп-двигатели, выход за пределы</div></div>
+</div>
+</section>
+
+<!-- Status Bar Decorative -->
+<section class="w-full max-w-3xl mx-auto">
+<div class="flex justify-between font-label-caps text-[10px]">
+<span class="text-outline">ЗАГРУЗКА КАРТЫ СИСТЕМЫ...</span>
+<span class="text-primary">100%</span>
+</div>
+<div class="w-full h-8 border-2 border-outline-variant flex p-1">
+<div class="bg-primary h-full w-full flex items-center justify-center overflow-hidden">
+<div class="whitespace-nowrap text-[8px] text-on-primary font-bold">████████████████████████████████████████████████████████████████████████████████</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="bg-surface-container-lowest w-full bottom-0 border-t-2 border-outline-variant mt-16">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-gutter py-panel-padding max-w-container-max mx-auto gap-cell">
+<div class="flex flex-col gap-1 items-center md:items-start">
+<div class="font-headline-md text-headline-md text-primary">VOIDCORP TERMINAL</div>
+<div class="font-label-caps text-label-caps text-outline">(C) 2026 VoidCorp Industries · v0.1.0-beta · MIT</div>
+</div>
+<div class="flex gap-6">
+<a class="font-label-caps text-label-caps text-outline hover:text-tertiary transition-colors flex items-center gap-2" href="https://github.com/shirou-eh/Cosmos-cli">
+<span class="material-symbols-outlined text-[18px]">code</span> GITHUB
+            </a>
+<a class="font-label-caps text-label-caps text-outline hover:text-tertiary transition-colors flex items-center gap-2" href="https://docs.cosmos-cli.xyz">
+<span class="material-symbols-outlined text-[18px]">menu_book</span> DOCS
+            </a>
+<a class="font-label-caps text-label-caps text-outline hover:text-tertiary transition-colors" href="https://cosmos-cli.xyz/install">INSTALL</a>
+<a class="font-label-caps text-label-caps text-outline hover:text-tertiary transition-colors" href="https://github.com/shirou-eh/Cosmos-cli/issues">ISSUES</a>
+</div>
+</div>
+</footer>
+
+<script>
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const command = 'curl -fsSL https://cosmos-cli.xyz/install | bash';
+            navigator.clipboard.writeText(command).then(() => {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span> ГОТОВО!';
+                this.classList.replace('border-primary-container', 'border-secondary-fixed');
+                this.classList.replace('text-primary-container', 'text-secondary-fixed');
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.replace('border-secondary-fixed', 'border-primary-container');
+                    this.classList.replace('text-secondary-fixed', 'text-primary-container');
+                }, 2000);
+            });
+        });
+    </script>
+
+</body></html>
