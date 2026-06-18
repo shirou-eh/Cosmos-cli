@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  cosmos-cli:
+    build: .
+    container_name: cosmos_cli
+    volumes:
+      - .:/app
+    stdin_open: true # Equivalent to -i
+    tty: true        # Equivalent to -t

@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env
+cosmos_data.db
+.install_anim.py
